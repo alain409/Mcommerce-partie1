@@ -1,0 +1,84 @@
+{
+	"id": "f5238309-8a64-4895-9136-2d4e266de059",
+	"name": "MicrocommerceTests",
+	"timestamp": "2020-07-14T04:00:26.708Z",
+	"collection_id": "154e3172-84d3-4b9f-92de-463f885c4e48",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "bfa6dcfd-92d7-40e9-a894-c1a95f8412a3",
+			"name": "http://localhost:9090/Produits/AdminProduits",
+			"url": "http://localhost:9090/Produits/AdminProduits",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				14
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "77b68f63-db2f-46bd-8835-a020a97e7b71",
+			"name": "http://localhost:9090/TriProduits",
+			"url": "http://localhost:9090/TriProduits",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				8
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "ccb00ec3-0d4d-4658-a2bb-3337c5c61867",
+			"name": "http://localhost:9090/Produits",
+			"url": "http://localhost:9090/Produits",
+			"time": 12,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				12
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 34,
+	"collection": {
+		"requests": [
+			{
+				"id": "bfa6dcfd-92d7-40e9-a894-c1a95f8412a3",
+				"method": "GET"
+			},
+			{
+				"id": "77b68f63-db2f-46bd-8835-a020a97e7b71",
+				"method": "GET"
+			},
+			{
+				"id": "ccb00ec3-0d4d-4658-a2bb-3337c5c61867",
+				"method": "POST"
+			}
+		]
+	}
+}
