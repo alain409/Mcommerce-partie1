@@ -3,6 +3,7 @@ package com.ecommerce.microcommerce.web.controller;
 import com.ecommerce.microcommerce.dao.ProductDao;
 import com.ecommerce.microcommerce.model.Product;
 import com.ecommerce.microcommerce.web.exceptions.ProduitIntrouvableException;
+import com.ecommerce.microcommerce.web.exceptions.ProduitPrixNullException;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -16,7 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
+import java.util.*;
 
 
 @Api( description="API pour es opérations CRUD sur les produits.")
@@ -31,7 +32,6 @@ public class ProductController {
     //Récupérer la liste des produits
 
     @RequestMapping(value = "/Produits", method = RequestMethod.GET)
-
     public MappingJacksonValue listeProduits() {
 
         Iterable<Product> produits = productDao.findAll();
@@ -47,7 +47,6 @@ public class ProductController {
         return produitsFiltres;
     }
 
-
     //Récupérer un produit par son Id
     @ApiOperation(value = "Récupère un produit grâce à son ID à condition que celui-ci soit en stock!")
     @GetMapping(value = "/Produits/{id}")
@@ -61,15 +60,14 @@ public class ProductController {
         return produit;
     }
 
-
-
-
     //ajouter un produit
     @PostMapping(value = "/Produits")
-
     public ResponseEntity<Void> ajouterProduit(@Valid @RequestBody Product product) {
 
         Product productAdded =  productDao.save(product);
+
+        if(productAdded.getPrix() == 0)
+            throw new ProduitPrixNullException("Le produit avec l'id " + productAdded.getId() + " son prix est nulle.");
 
         if (productAdded == null)
             return ResponseEntity.noContent().build();
@@ -86,12 +84,11 @@ public class ProductController {
     @DeleteMapping (value = "/Produits/{id}")
     public void supprimerProduit(@PathVariable int id) {
 
-        productDao.delete(id);
+        productDao.deleteById(id);
     }
 
     @PutMapping (value = "/Produits")
     public void updateProduit(@RequestBody Product product) {
-
         productDao.save(product);
     }
 
@@ -103,6 +100,20 @@ public class ProductController {
         return productDao.chercherUnProduitCher(400);
     }
 
+    //Calculer la différence entre le prix d'achat et le prix de vente de chaque produit
+    @GetMapping (value = "/Produits/AdminProduits")
+    public Map<Product, Integer> calculerMargeProduit(){
+        Map<Product, Integer>  listeProduitMarge = new LinkedHashMap<>();
+        for(Product product : productDao.findAll()){
+            listeProduitMarge.put(product, product.getPrix() - product.getPrixAchat());
+        }
+        return listeProduitMarge;
+    }
 
-
+    //Méthode permet de trier les produits par ordre alphabétique de nom
+    @GetMapping(value = "/TriProduits")
+    @ResponseBody
+    public List<Product> trierProduitsParOrdreAlphabetique() {
+        return productDao.findAllByOrderByNom();
+    }
 }
